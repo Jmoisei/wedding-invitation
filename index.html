@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #b59b6d; --dark: #1a1a1a; --light: #fdfcfb; --red: #e63946; }
+        body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--light); color: var(--dark); text-align: center; }
+        .hero { 
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+            url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80') center/cover;
+            color: white; padding: 0 20px;
+        }
+        .names { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 8vw, 3.5rem); margin: 20px 0; }
+        .lang-switch { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+        .lang-btn { background: white; border: 1px solid var(--dark); padding: 8px 15px; cursor: pointer; border-radius: 20px; font-weight: bold; margin-left: 5px; }
+        .section { padding: 60px 20px; max-width: 500px; margin: 0 auto; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 20px; }
+        .heart-date { color: var(--red); font-weight: bold; position: relative; }
+        .heart-date::after { content: '❤'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; color: rgba(230,57,70,0.2); z-index: -1; }
+        .timer-display { display: flex; justify-content: center; gap: 15px; font-size: 1.2rem; }
+        .timer-display span { display: block; font-size: 2rem; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-weight: bold; }
+        .rsvp-section { background: #f4f1ee; padding: 60px 20px; }
+        form { text-align: left; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; color: var(--gold); }
+        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        .submit-btn { background: var(--dark); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switch">
+        <button class="lang-btn" id="btn-ua">UA</button>
+        <button class="lang-btn" id="btn-de">DE</button>
+    </div>
+
+    <section class="hero">
+        <div style="text-transform: uppercase; letter-spacing: 3px;">Save the Date</div>
+        <div class="names" id="names-display">Christopher & Yuliia</div>
+        <div style="font-size: 1.5rem; border-top: 1px solid white; padding-top: 10px;">22.08.2026</div>
+    </section>
+
+    <section class="section">
+        <h2 id="t-guests-title">Дорогі Гості!</h2>
+        <p id="t-invite-text">Запрошуємо вас на наше весілля!</p>
+        <h3 id="t-month" style="color:var(--gold); font-family:serif; font-size:2rem; margin-top: 30px;">Серпень</h3>
+        <div class="calendar-grid" id="calendar-grid"></div>
+    </section>
+
+    <section class="section">
+        <h2 id="t-timer-title">До свята залишилось:</h2>
+        <div class="timer-display">
+            <div><span id="days">0</span><small id="t-days">днів</small></div>
+            <div><span id="hours">0</span><small id="t-hours">год</small></div>
+            <div><span id="mins">0</span><small id="t-mins">хв</small></div>
+            <div><span id="secs">0</span><small id="t-secs">сек</small></div>
+        </div>
+    </section>
+
+    <section class="rsvp-section">
+        <div class="section">
+            <h2 id="t-rsvp-title">Анкета гостя</h2>
+            <form action="https://formspree.io/f/xvzadpwy" method="POST">
+                <label id="t-label-name">Ім'я та прізвище:</label>
+                <input type="text" name="name" required id="f-name">
+                
+                <label id="t-label-attendance">Чи прийдете?</label>
+                <select name="attendance">
+                    <option value="yes" id="t-opt-yes">Так, з радістю!</option>
+                    <option value="no" id="t-opt-no">На жаль, ні</option>
+                </select>
+
+                <label id="t-label-allergy">Алергії або побажання щодо їжі:</label>
+                <input type="text" name="allergy" id="f-allergy">
+
+                <label id="t-label-drinks">Що будете пити?</label>
+                <input type="text" name="drinks" id="f-drinks">
+
+                <button type="submit" class="submit-btn" id="t-btn">ПІДТВЕРДИТИ</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        const translations = {
+            ua: {
+                names: "Крістофер & Юлія", guestsTitle: "Дорогі Гості!", inviteText: "Запрошуємо вас на наше весілля!",
+                month: "Серпень", days: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
+                timer: "До свята залишилось:", d: "днів", h: "год", m: "хв", s: "сек",
+                rsvp: "Анкета гостя", name: "Ім'я та прізвище:", attend: "Чи прийдете?", 
+                yes: "Так, з радістю!", no: "На жаль, ні", allergy: "Алергії / Побажання:", 
+                drinks: "Що будете пити?", btn: "ПІДТВЕРДИТИ",
+                pName: "Наприклад, Максим Іванов та Олена", pAllergy: "Наприклад: я вегетаріанець, горіхи або немає", pDrinks: "Вино, віскі..."
+            },
+            de: {
+                names: "Christopher & Yuliia", guestsTitle: "Liebe Gäste!", inviteText: "Wir laden euch zu unserer Hochzeit ein!",
+                month: "August", days: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+                timer: "Bis zur Hochzeit:", d: "Tage", h: "Std", m: "Min", s: "Sek",
+                rsvp: "RSVP", name: "Vor- und Nachname:", attend: "Kommen Sie?", 
+                yes: "Ja, gerne!", no: "Leider nicht", allergy: "Allergien / Wünsche:", 
+                drinks: "Was trinken Sie?", btn: "BESTÄTIGEN",
+                pName: "Vor- und Nachname", pAllergy: "Z.B. Ich bin Vegetarier, Nüsse oder keine", pDrinks: "Wein, Whisky..."
+            }
+        };
+
+        function render(lang) {
+            const t = translations[lang];
+            document.getElementById('names-display').innerText = t.names;
+            document.getElementById('t-guests-title').innerText = t.guestsTitle;
+            document.getElementById('t-invite-text').innerText = t.inviteText;
+            document.getElementById('t-month').innerText = t.month;
+            document.getElementById('t-timer-title').innerText = t.timer;
+            document.getElementById('t-days').innerText = t.d;
+            document.getElementById('t-hours').innerText = t.h;
+            document.getElementById('t-mins').innerText = t.m;
+            document.getElementById('t-secs').innerText = t.s;
+            document.getElementById('t-rsvp-title').innerText = t.rsvp;
+            document.getElementById('t-label-name').innerText = t.name;
+            document.getElementById('t-label-attendance').innerText = t.attend;
+            document.getElementById('t-opt-yes').innerText = t.yes;
+            document.getElementById('t-opt-no').innerText = t.no;
+            document.getElementById('t-label-allergy').innerText = t.allergy;
+            document.getElementById('t-label-drinks').innerText = t.drinks;
+            document.getElementById('t-btn').innerText = t.btn;
+            
+            // Переклад підказок (placeholder)
+            document.getElementById('f-name').placeholder = t.pName;
+            document.getElementById('f-allergy').placeholder = t.pAllergy;
+            document.getElementById('f-drinks').placeholder = t.pDrinks;
+
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            t.days.forEach(d => {
+                const dayHeader = document.createElement('div');
+                dayHeader.style.fontWeight = 'bold';
+                dayHeader.innerText = d;
+                grid.appendChild(dayHeader);
+            });
+            for(let i=0; i<5; i++) grid.appendChild(document.createElement('div'));
+            for(let i=1; i<=31; i++) {
+                const day = document.createElement('div');
+                day.innerText = i;
+                if(i === 22) day.className = 'heart-date';
+                grid.appendChild(day);
+            }
+        }
+
+        function updateTimer() {
+            const diff = new Date("2026-08-22T14:00:00").getTime() - new Date().getTime();
+            if (diff > 0) {
+                document.getElementById("days").innerText = Math.floor(diff / 86400000);
+                document.getElementById("hours").innerText = Math.floor((diff / 3600000) % 24);
+                document.getElementById("mins").innerText = Math.floor((diff / 60000) % 60);
+                document.getElementById("secs").innerText = Math.floor((diff / 1000) % 60);
+            }
+        }
+
+        window.onload = () => {
+            render('ua');
+            setInterval(updateTimer, 1000);
+            updateTimer();
+            document.getElementById('btn-ua').onclick = () => render('ua');
+            document.getElementById('btn-de').onclick = () => render('de');
+        };
+    </script>
+</body>
+</html>
