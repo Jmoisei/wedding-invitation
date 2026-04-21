@@ -40,13 +40,13 @@
     <section class="hero">
         <div style="text-transform: uppercase; letter-spacing: 3px;">Save the Date</div>
         <div class="names" id="names-display">Christopher & Yuliia</div>
-        <div style="font-size: 1.5rem; border-top: 1px solid white; padding-top: 10px;">22.08.2026</div>
+        <div style="font-size: 1.5rem; border-top: 1px solid white; padding-top: 10px;">25.09.2026</div>
     </section>
 
     <section class="section">
         <h2 id="t-guests-title">Дорогі Гості!</h2>
         <p id="t-invite-text">Запрошуємо вас на наше весілля!</p>
-        <h3 id="t-month" style="color:var(--gold); font-family:serif; font-size:2rem; margin-top: 30px;">Серпень</h3>
+        <h3 id="t-month" style="color:var(--gold); font-family:serif; font-size:2rem; margin-top: 30px;">Вересень</h3>
         <div class="calendar-grid" id="calendar-grid"></div>
     </section>
 
@@ -88,7 +88,7 @@
         const translations = {
             ua: {
                 names: "Крістофер & Юлія", guestsTitle: "Дорогі Гості!", inviteText: "Запрошуємо вас на наше весілля!",
-                month: "Серпень", days: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
+                month: "Вересень", days: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
                 timer: "До свята залишилось:", d: "днів", h: "год", m: "хв", s: "сек",
                 rsvp: "Анкета гостя", name: "Ім'я та прізвище:", attend: "Чи прийдете?", 
                 yes: "Так, з радістю!", no: "На жаль, ні", allergy: "Алергії / Побажання:", 
@@ -97,7 +97,7 @@
             },
             de: {
                 names: "Christopher & Yuliia", guestsTitle: "Liebe Gäste!", inviteText: "Wir laden euch zu unserer Hochzeit ein!",
-                month: "August", days: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+                month: "September", days: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
                 timer: "Bis zur Hochzeit:", d: "Tage", h: "Std", m: "Min", s: "Sek",
                 rsvp: "RSVP", name: "Vor- und Nachname:", attend: "Kommen Sie?", 
                 yes: "Ja, gerne!", no: "Leider nicht", allergy: "Allergien / Wünsche:", 
@@ -139,17 +139,17 @@
                 dayHeader.innerText = d;
                 grid.appendChild(dayHeader);
             });
-            for(let i=0; i<5; i++) grid.appendChild(document.createElement('div'));
-            for(let i=1; i<=31; i++) {
+            for(let i=0; i<1; i++) grid.appendChild(document.createElement('div'));
+            for(let i=1; i<=30; i++) {
                 const day = document.createElement('div');
                 day.innerText = i;
-                if(i === 22) day.className = 'heart-date';
+                if(i === 25) day.className = 'heart-date';
                 grid.appendChild(day);
             }
         }
 
         function updateTimer() {
-            const diff = new Date("2026-08-22T14:00:00").getTime() - new Date().getTime();
+            const diff = new Date("2026-09-25T10:00:00").getTime() - new Date().getTime();
             if (diff > 0) {
                 document.getElementById("days").innerText = Math.floor(diff / 86400000);
                 document.getElementById("hours").innerText = Math.floor((diff / 3600000) % 24);
@@ -162,6 +162,12 @@
             render('ua');
             setInterval(updateTimer, 1000);
             updateTimer();
+            document.getElementById('btn-ua').onclick = () => render('ua');
+            document.getElementById('btn-de').onclick = () => render('de');
+        };
+    </script>
+</body>
+</html>
             document.getElementById('btn-ua').onclick = () => render('ua');
             document.getElementById('btn-de').onclick = () => render('de');
         };
